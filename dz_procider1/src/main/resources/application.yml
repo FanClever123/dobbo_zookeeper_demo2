@@ -1,0 +1,58 @@
+server:
+  port: 7071
+
+## Dubbo 服务提供者配置
+#应用名
+spring:
+  dubbo:
+    application:
+      name: provider1
+    #zookeeper的注册地址
+    registry:
+      address: zookeeper://127.0.0.1:2181
+    #注册zookeeper的协议
+    protocol:
+      name: dubbo
+      #提供者业务层注册到dubbo中的端口号
+      port: 20881
+    #扫描提供服务的业务层实现类路径
+    scan: com.java.zd.service.impl
+  #配置阿里巴巴数据源的四大件
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/staff?useSSL=false&characterEncoding=utf8
+    username: root
+    password: root
+    # 连接池的配置信息
+    druid:
+      # 初始化大小，最小，最大
+      initial-size: 5
+      min-idle: 5
+      maxActive: 20
+      # 配置获取连接等待超时的时间
+      maxWait: 60000
+      # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      timeBetweenEvictionRunsMillis: 60000
+      # 配置一个连接在池中最小生存的时间，单位是毫秒
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT 1 FROM DUAL
+
+#配置pagehelper分页插件
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+
+mybatis:
+  type-aliases-package: com.java.zd.mapper
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    #开启懒加载
+    lazy-loading-enabled: true
+    #false 为按需加载
+    aggressive-lazy-loading: false
+    #开启MyBatis的二级缓存
+    cache-enabled: true
+  mapper-locations: classpath:mapper/*.xml

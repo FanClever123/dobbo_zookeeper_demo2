@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.java.zd.mapper.GoodtypeMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.java.zd.model.GoodtypeEntity" id="goodtypeMap">
+        <result property="tid" column="tid"/>
+        <result property="tname" column="tname"/>
+        <result property="tdesc" column="tdesc"/>
+    </resultMap>
+  
+  <!--要查询的字段-->  
+  <sql id="sel_GoodtypeColumns_List" > 
+  	  tid ,        
+  tname ,        
+  tdesc         
+  
+  </sql>
+  
+  <!--要添加的字段-->
+  <sql id="ins_GoodtypeColumns_List" >
+       #{tid},   #{tname},   #{tdesc}   </sql> 
+  
+  <!--要修改的字段-->
+  <sql id="upd_GoodtypeColumns_List" >
+    <set>
+    <if test="t.tname != null">tname = #{t.tname}, </if>
+    <if test="t.tdesc != null">tdesc = #{t.tdesc}</if>
+	</set>
+	where tid = #{t.tid}
+  </sql> 
+  
+  <!--定义删除的条件-->
+  <sql id="del_GoodtypePramas_List">
+    <where>
+    <if test="t.tid != null">and tid = #{t.tid}</if>
+    <if test="t.tname != null">and tname = #{t.tname}</if>
+    <if test="t.tdesc != null">and tdesc = #{t.tdesc}</if>
+	</where>
+  </sql> 
+  
+  <!--定义查询的条件-->
+  <sql id="sel_GoodtypePramas_List">
+    <where>
+    <if test="t.tid != null">and tid = #{t.tid}</if>
+    <if test="t.tname != null">and tname = #{t.tname}</if>
+    <if test="t.tdesc != null">and tdesc = #{t.tdesc}</if>
+	</where>
+  </sql>
+
+    <!--添加-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="tid">
+        insert into goodtype values (<include refid="ins_GoodtypeColumns_List" />)
+    </insert>
+
+    <!--修改-->
+    <update id="update">
+        update goodtype <include refid="upd_GoodtypeColumns_List" />
+    </update>
+
+    <!--根据条件删除-->
+    <delete id="delete">
+        delete from goodtype <include refid="del_GoodtypePramas_List" />
+    </delete>
+
+    <!--批量删除-->
+    <delete id="deleteBatch">
+        delete from goodtype where tid in
+        <foreach item="tid" collection="array" open="(" separator="," close=")">
+            #{tid}
+        </foreach>
+    </delete>
+
+    <!--根据主键id查询单个对象-->
+	<select id="queryObjectById" resultMap="goodtypeMap">
+		select  <include refid="sel_GoodtypeColumns_List" />  from goodtype where tid = #{id}
+	</select>
+	
+	<!--查询所有对象-->
+	<select id="queryAll" resultMap="goodtypeMap">
+		select  <include refid="sel_GoodtypeColumns_List" />  from goodtype
+    </select>
+
+    <!--根据条件（无条件）查询多个对象-->
+	<select id="queryManyByPramas" resultMap="goodtypeMap">
+		select  <include refid="sel_GoodtypeColumns_List" />  from goodtype <include refid="sel_GoodtypePramas_List" />
+	</select>
+	
+	<!--根据条件（无条件）分页查询-->
+	<select id="queryListByPramas" resultMap="goodtypeMap">
+		select  <include refid="sel_GoodtypeColumns_List" />  from goodtype <include refid="sel_GoodtypePramas_List" /> order by tid desc
+	</select>
+
+    <!--根据条件查询单条数据-->
+    <select id="queryObjectByPramas" resultMap="goodtypeMap">
+        select  <include refid="sel_GoodtypeColumns_List" />  from goodtype <include refid="sel_GoodtypePramas_List" />
+    </select>
+	
+	<!--根据条件（无条件）查询数据条数-->
+ 	<select id="queryTotalByPramas" resultType="java.lang.Long">
+		select count(*) from goodtype <include refid="sel_GoodtypePramas_List" />
+	</select>
+	
+
+
+</mapper>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.java.zd.mapper.GoodMapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.java.zd.model.GoodEntity" id="goodMap">
+        <result property="id" column="id"/>
+        <result property="gname" column="gname"/>
+        <result property="price" column="price"/>
+        <result property="makedate" column="makedate"/>
+        <result property="tid" column="tid"/>
+        <result property="nums" column="nums"/>
+        <result property="sales" column="sales"/>
+    </resultMap>
+  
+  <!--要查询的字段-->  
+  <sql id="sel_GoodColumns_List" > 
+  	  id ,        
+  gname ,        
+  price ,        
+  makedate ,        
+  tid ,        
+  nums ,        
+  sales         
+  
+  </sql>
+  
+  <!--要添加的字段-->
+  <sql id="ins_GoodColumns_List" >
+       #{id},   #{gname},   #{price},   #{makedate},   #{tid},   #{nums},   #{sales}   </sql> 
+  
+  <!--要修改的字段-->
+  <sql id="upd_GoodColumns_List" >
+    <set>
+    <if test="t.gname != null">gname = #{t.gname}, </if>
+    <if test="t.price != null">price = #{t.price}, </if>
+    <if test="t.makedate != null">makedate = #{t.makedate}, </if>
+    <if test="t.tid != null">tid = #{t.tid}, </if>
+    <if test="t.nums != null">nums = #{t.nums}, </if>
+    <if test="t.sales != null">sales = #{t.sales}</if>
+	</set>
+	where id = #{t.id}
+  </sql> 
+  
+  <!--定义删除的条件-->
+  <sql id="del_GoodPramas_List">
+    <where>
+    <if test="t.id != null">and id = #{t.id}</if>
+    <if test="t.gname != null">and gname = #{t.gname}</if>
+    <if test="t.price != null">and price = #{t.price}</if>
+    <if test="t.makedate != null">and makedate = #{t.makedate}</if>
+    <if test="t.tid != null">and tid = #{t.tid}</if>
+    <if test="t.nums != null">and nums = #{t.nums}</if>
+    <if test="t.sales != null">and sales = #{t.sales}</if>
+	</where>
+  </sql> 
+  
+  <!--定义查询的条件-->
+  <sql id="sel_GoodPramas_List">
+    <where>
+    <if test="t.id != null">and id = #{t.id}</if>
+    <if test="t.gname != null">and gname = #{t.gname}</if>
+    <if test="t.price != null">and price = #{t.price}</if>
+    <if test="t.makedate != null">and makedate = #{t.makedate}</if>
+    <if test="t.tid != null">and tid = #{t.tid}</if>
+    <if test="t.nums != null">and nums = #{t.nums}</if>
+    <if test="t.sales != null">and sales = #{t.sales}</if>
+	</where>
+  </sql>
+
+    <!--添加-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into good values (<include refid="ins_GoodColumns_List" />)
+    </insert>
+
+    <!--修改-->
+    <update id="update">
+        update good <include refid="upd_GoodColumns_List" />
+    </update>
+
+    <!--根据条件删除-->
+    <delete id="delete">
+        delete from good <include refid="del_GoodPramas_List" />
+    </delete>
+
+    <!--批量删除-->
+    <delete id="deleteBatch">
+        delete from good where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--根据主键id查询单个对象-->
+	<select id="queryObjectById" resultMap="goodMap">
+		select  <include refid="sel_GoodColumns_List" />  from good where id = #{id}
+	</select>
+	
+	<!--查询所有对象-->
+	<select id="queryAll" resultMap="goodMap">
+		select  <include refid="sel_GoodColumns_List" />  from good
+    </select>
+
+    <!--根据条件（无条件）查询多个对象-->
+	<select id="queryManyByPramas" resultMap="goodMap">
+		select  <include refid="sel_GoodColumns_List" />  from good <include refid="sel_GoodPramas_List" />
+	</select>
+	
+	<!--根据条件（无条件）分页查询-->
+	<select id="queryListByPramas" resultMap="goodMap">
+		select  <include refid="sel_GoodColumns_List" />  from good <include refid="sel_GoodPramas_List" /> order by id desc
+	</select>
+
+    <!--根据条件查询单条数据-->
+    <select id="queryObjectByPramas" resultMap="goodMap">
+        select  <include refid="sel_GoodColumns_List" />  from good <include refid="sel_GoodPramas_List" />
+    </select>
+	
+	<!--根据条件（无条件）查询数据条数-->
+ 	<select id="queryTotalByPramas" resultType="java.lang.Long">
+		select count(*) from good <include refid="sel_GoodPramas_List" />
+	</select>
+	
+
+
+</mapper>
